@@ -1,6 +1,6 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 const userSchema = new Schema(
   {
     username: {
@@ -38,7 +38,7 @@ const userSchema = new Schema(
       },
     ],
     password: {
-      type: string,
+      type: String,
       required: [true, "Password is required."],
     },
     refreshToken: {
@@ -51,7 +51,7 @@ const userSchema = new Schema(
 // encrypth password just before the update
 userSchema.pre("save", async function (next) { // pre is a mosgoose hook
   if (!this.isModified("password")) return next();
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
